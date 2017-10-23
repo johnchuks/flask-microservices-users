@@ -1,16 +1,28 @@
-from flask import Flask, jsonify
-from project.config import DevelopmentConfig
+import os
+
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 
 
-#instantiate the application
-app = Flask(__name__)
+# instantiate the db
 
-#set config
-app.config.from_object(DevelopmentConfig)
+db = SQLAlchemy()
 
-@app.route('/ping', methods=['GET'])
-def ping_pong():
-  return jsonify({
-    'status':'success',
-    'message': 'pong!'
-  })
+
+def create_app():
+    # instantiate the application
+    app = Flask(__name__)
+
+    # set config
+    app_settings = os.getenv('APP_SETTINGS')
+    app.config.from_object(app_settings)
+
+    # set up extension
+    db.init_app(app)
+
+    # register blueprints
+    from project.api.views import user_blueprint
+
+    app.register_blueprint(user_blueprint)
+
+    return app
