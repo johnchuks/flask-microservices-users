@@ -19,6 +19,14 @@ def recreate_db():
 
 
 @manager.command
+def seed_db():
+    """Seeds the database."""
+    db.session.add(User(username='johnchuks', email="johnchuks@gmail.com"))
+    db.session.add(User(username='john', email="johnbosco@mherman.org"))
+    db.session.commit()
+
+
+@manager.command
 def test():
     """Runs the tests without code coverage."""
     tests = unittest.TestLoader().discover('project/tests', pattern='test*.py')
@@ -30,4 +38,3 @@ def test():
 
 if __name__ == '__main__':
     manager.run()
-
