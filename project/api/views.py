@@ -60,9 +60,9 @@ def get_all_users():
             return jsonify(response_object), 200
 
 
-@user_blueprint.route('/users/<user_id>', methods=['GET'])
+@user_blueprint.route('/users/<int:user_id>', methods=['GET'])
 def get_user(user_id):
-    requested_user = User.query.filter(id=int(user_id)).first()
+    requested_user = User.query.filter_by(id=user_id).first()
     try:
         if not requested_user:
             response_object = dict(status='fail', message='user not found')
